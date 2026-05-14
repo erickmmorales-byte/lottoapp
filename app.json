@@ -8,7 +8,7 @@
     "newArchEnabled": true,
     "splash": {
       "resizeMode": "contain",
-      "backgroundColor": "#1a0b2e"
+      "backgroundColor": "#0a0118"
     },
     "ios": {
       "supportsTablet": true,
@@ -20,7 +20,7 @@
     "android": {
       "package": "com.example.lottoapp",
       "adaptiveIcon": {
-        "backgroundColor": "#1a0b2e"
+        "backgroundColor": "#0a0118"
       }
     },
     "web": {

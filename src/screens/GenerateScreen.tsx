@@ -23,6 +23,7 @@ import { SIGNS, Sign, buildHoroscopeSeed, dailyVibe } from "../horoscope";
 import { SegmentedControl } from "../components/SegmentedControl";
 import { GameCard } from "../components/GameCard";
 import { Disclaimer } from "../components/Disclaimer";
+import { RegenerateAdGate } from "../components/RegenerateAdGate";
 import { HistoryEntry, saveEntry } from "../storage";
 
 type Mode = "numerology" | "horoscope";
@@ -45,6 +46,7 @@ export function GenerateScreen({ onSaved }: { onSaved: () => void }) {
   const [timeOfBirth, setTimeOfBirth] = useState("");
   const [signId, setSignId] = useState<string | null>(null);
   const [result, setResult] = useState<Result | null>(null);
+  const [adGateOpen, setAdGateOpen] = useState(false);
 
   const inputs: NumerologyInputs = useMemo(
     () => ({ name, dob, hometown, timeOfBirth: timeOfBirth || undefined }),
@@ -82,7 +84,15 @@ export function GenerateScreen({ onSaved }: { onSaved: () => void }) {
     }
   };
 
-  const regenerate = () => generate((result?.tweak ?? 0) + 1);
+  const requestRegenerate = () => {
+    if (!result) return;
+    setAdGateOpen(true);
+  };
+
+  const completeRegenerate = () => {
+    setAdGateOpen(false);
+    generate((result?.tweak ?? 0) + 1);
+  };
 
   const save = async () => {
     if (!result) return;
@@ -155,13 +165,19 @@ export function GenerateScreen({ onSaved }: { onSaved: () => void }) {
         {result && (
           <ResultBlock
             result={result}
-            onRegenerate={regenerate}
+            onRegenerate={requestRegenerate}
             onSave={save}
           />
         )}
 
         <Disclaimer />
       </ScrollView>
+
+      <RegenerateAdGate
+        visible={adGateOpen}
+        onComplete={completeRegenerate}
+        onCancel={() => setAdGateOpen(false)}
+      />
     </KeyboardAvoidingView>
   );
 }
@@ -369,7 +385,7 @@ const styles = StyleSheet.create({
   },
   ctaPressed: { opacity: 0.85, transform: [{ scale: 0.99 }] },
   ctaDisabled: { backgroundColor: "rgba(255,255,255,0.12)", shadowOpacity: 0 },
-  ctaText: { color: "#1a0b2e", fontWeight: "800", fontSize: 16, letterSpacing: 0.3 },
+  ctaText: { color: "#0a0118", fontWeight: "800", fontSize: 16, letterSpacing: 0.3 },
   results: { marginTop: 20 },
   resultsHeader: { paddingHorizontal: 20, marginBottom: 10 },
   resultLabel: { color: "#fff", fontSize: 18, fontWeight: "700" },

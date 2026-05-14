@@ -36,7 +36,7 @@ export default function App() {
 
   return (
     <SafeAreaProvider>
-      <LinearGradient colors={["#1a0b2e", "#2d0a4e", "#0b0820"]} style={styles.gradient}>
+      <LinearGradient colors={["#0a0118", "#1c0436", "#040108"]} style={styles.gradient}>
         <StatusBar style="light" />
         <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
           <View style={styles.flex}>

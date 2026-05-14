@@ -18,7 +18,7 @@ export function NumberBall({ value, variant = "main", accent = "#ffffff" }: Prop
           : { backgroundColor: "#ffffff", shadowColor: "#ffffff" },
       ]}
     >
-      <Text style={[styles.text, isBonus && { color: "#0b0820" }]}>
+      <Text style={[styles.text, isBonus && { color: "#040108" }]}>
         {value.toString().padStart(2, "0")}
       </Text>
     </View>
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 18,
     fontWeight: "800",
-    color: "#1a0b2e",
+    color: "#0a0118",
     fontVariant: ["tabular-nums"],
   },
 });
