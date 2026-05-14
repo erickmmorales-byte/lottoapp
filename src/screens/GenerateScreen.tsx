@@ -25,7 +25,7 @@ import { GameCard } from "../components/GameCard";
 import { Disclaimer } from "../components/Disclaimer";
 import { RegenerateAdGate } from "../components/RegenerateAdGate";
 import { CitySearch } from "../components/CitySearch";
-import { TimePicker } from "../components/TimePicker";
+import { DateOfBirthPicker } from "../components/DateOfBirthPicker";
 import { NumerologyMeaningsModal } from "../components/NumerologyMeaningsModal";
 import { useRewardedAd } from "../ads/useRewardedAd";
 import { HistoryEntry, saveEntry } from "../storage";
@@ -214,12 +214,10 @@ function NumerologyForm(props: FormProps) {
   return (
     <View style={styles.card}>
       <Field label="Full name" value={props.name} onChange={props.setName} placeholder="Jane Doe" autoCapitalize="words" />
-      <Field
+      <DateOfBirthPicker
         label="Date of birth"
         value={props.dob}
         onChange={props.setDob}
-        placeholder="YYYY-MM-DD"
-        keyboardType="numbers-and-punctuation"
       />
       <CitySearch
         label="Hometown"
@@ -227,11 +225,12 @@ function NumerologyForm(props: FormProps) {
         onChange={props.setHometown}
         placeholder="Start typing a city…"
       />
-      <TimePicker
+      <Field
         label="Time of birth (optional)"
         value={props.timeOfBirth}
         onChange={props.setTimeOfBirth}
-        placeholder="Tap to select a time"
+        placeholder="HH:MM (24-hr) or 2:30 PM"
+        keyboardType="numbers-and-punctuation"
       />
     </View>
   );
