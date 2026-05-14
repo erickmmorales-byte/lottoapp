@@ -24,6 +24,7 @@ import { SegmentedControl } from "../components/SegmentedControl";
 import { GameCard } from "../components/GameCard";
 import { Disclaimer } from "../components/Disclaimer";
 import { RegenerateAdGate } from "../components/RegenerateAdGate";
+import { useRewardedAd } from "../ads/useRewardedAd";
 import { HistoryEntry, saveEntry } from "../storage";
 
 type Mode = "numerology" | "horoscope";
@@ -47,6 +48,7 @@ export function GenerateScreen({ onSaved }: { onSaved: () => void }) {
   const [signId, setSignId] = useState<string | null>(null);
   const [result, setResult] = useState<Result | null>(null);
   const [adGateOpen, setAdGateOpen] = useState(false);
+  const rewarded = useRewardedAd();
 
   const inputs: NumerologyInputs = useMemo(
     () => ({ name, dob, hometown, timeOfBirth: timeOfBirth || undefined }),
@@ -86,7 +88,11 @@ export function GenerateScreen({ onSaved }: { onSaved: () => void }) {
 
   const requestRegenerate = () => {
     if (!result) return;
-    setAdGateOpen(true);
+    const nextTweak = (result.tweak ?? 0) + 1;
+    const shown = rewarded.show(() => generate(nextTweak));
+    if (shown === "unavailable") {
+      setAdGateOpen(true);
+    }
   };
 
   const completeRegenerate = () => {
