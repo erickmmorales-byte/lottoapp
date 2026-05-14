@@ -1,0 +1,39 @@
+{
+  "expo": {
+    "name": "Lucky Numbers",
+    "slug": "lottoapp",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#1a0b2e"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.example.lottoapp",
+      "infoPlist": {
+        "NSUserTrackingUsageDescription": "This identifier will be used to deliver personalized ads to you."
+      }
+    },
+    "android": {
+      "package": "com.example.lottoapp",
+      "adaptiveIcon": {
+        "backgroundColor": "#1a0b2e"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "react-native-google-mobile-ads",
+        {
+          "androidAppId": "ca-app-pub-3940256099942544~3347511713",
+          "iosAppId": "ca-app-pub-3940256099942544~1458002511"
+        }
+      ]
+    ]
+  }
+}
