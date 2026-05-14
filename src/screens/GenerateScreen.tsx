@@ -24,6 +24,9 @@ import { SegmentedControl } from "../components/SegmentedControl";
 import { GameCard } from "../components/GameCard";
 import { Disclaimer } from "../components/Disclaimer";
 import { RegenerateAdGate } from "../components/RegenerateAdGate";
+import { CitySearch } from "../components/CitySearch";
+import { TimePicker } from "../components/TimePicker";
+import { NumerologyMeaningsModal } from "../components/NumerologyMeaningsModal";
 import { useRewardedAd } from "../ads/useRewardedAd";
 import { HistoryEntry, saveEntry } from "../storage";
 
@@ -48,6 +51,7 @@ export function GenerateScreen({ onSaved }: { onSaved: () => void }) {
   const [signId, setSignId] = useState<string | null>(null);
   const [result, setResult] = useState<Result | null>(null);
   const [adGateOpen, setAdGateOpen] = useState(false);
+  const [meaningsOpen, setMeaningsOpen] = useState(false);
   const rewarded = useRewardedAd();
 
   const inputs: NumerologyInputs = useMemo(
@@ -173,6 +177,7 @@ export function GenerateScreen({ onSaved }: { onSaved: () => void }) {
             result={result}
             onRegenerate={requestRegenerate}
             onSave={save}
+            onExplain={() => setMeaningsOpen(true)}
           />
         )}
 
@@ -183,6 +188,12 @@ export function GenerateScreen({ onSaved }: { onSaved: () => void }) {
         visible={adGateOpen}
         onComplete={completeRegenerate}
         onCancel={() => setAdGateOpen(false)}
+      />
+
+      <NumerologyMeaningsModal
+        visible={meaningsOpen}
+        profile={result?.profile ?? null}
+        onClose={() => setMeaningsOpen(false)}
       />
     </KeyboardAvoidingView>
   );
@@ -210,19 +221,17 @@ function NumerologyForm(props: FormProps) {
         placeholder="YYYY-MM-DD"
         keyboardType="numbers-and-punctuation"
       />
-      <Field
+      <CitySearch
         label="Hometown"
         value={props.hometown}
         onChange={props.setHometown}
-        placeholder="Sacramento, CA"
-        autoCapitalize="words"
+        placeholder="Start typing a city…"
       />
-      <Field
+      <TimePicker
         label="Time of birth (optional)"
         value={props.timeOfBirth}
         onChange={props.setTimeOfBirth}
-        placeholder="HH:MM"
-        keyboardType="numbers-and-punctuation"
+        placeholder="Tap to select a time"
       />
     </View>
   );
@@ -284,10 +293,12 @@ function ResultBlock({
   result,
   onRegenerate,
   onSave,
+  onExplain,
 }: {
   result: Result;
   onRegenerate: () => void;
   onSave: () => void;
+  onExplain: () => void;
 }) {
   return (
     <View style={styles.results}>
@@ -297,14 +308,23 @@ function ResultBlock({
       </View>
 
       {result.profile && (
-        <View style={styles.chips}>
-          {profileSummary(result.profile).map((c) => (
-            <View key={c.label} style={styles.chip}>
-              <Text style={styles.chipLabel}>{c.label}</Text>
-              <Text style={styles.chipValue}>{c.value}</Text>
-            </View>
-          ))}
-        </View>
+        <>
+          <View style={styles.chips}>
+            {profileSummary(result.profile).map((c) => (
+              <View key={c.label} style={styles.chip}>
+                <Text style={styles.chipLabel}>{c.label}</Text>
+                <Text style={styles.chipValue}>{c.value}</Text>
+              </View>
+            ))}
+          </View>
+          <Pressable
+            onPress={onExplain}
+            style={({ pressed }) => [styles.explainBtn, pressed && { opacity: 0.75 }]}
+          >
+            <Text style={styles.explainText}>What do these numbers mean?</Text>
+            <Text style={styles.explainChevron}>→</Text>
+          </Pressable>
+        </>
       )}
 
       {result.draws.map((draw) => {
@@ -408,6 +428,21 @@ const styles = StyleSheet.create({
   },
   chipLabel: { color: "rgba(255,255,255,0.6)", fontSize: 9, letterSpacing: 1, textTransform: "uppercase" },
   chipValue: { color: "#fde68a", fontSize: 14, fontWeight: "700" },
+  explainBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginHorizontal: 16,
+    marginBottom: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 14,
+    borderRadius: 12,
+    backgroundColor: "rgba(245,158,11,0.1)",
+    borderWidth: 1,
+    borderColor: "rgba(245,158,11,0.3)",
+  },
+  explainText: { color: "#fde68a", fontWeight: "700", fontSize: 13, flex: 1 },
+  explainChevron: { color: "#fde68a", fontSize: 14, marginLeft: 8 },
   actions: { flexDirection: "row", marginHorizontal: 16, marginTop: 6 },
   secondaryBtn: {
     flex: 1,
